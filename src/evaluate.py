@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 load_dotenv()
 sys.path.insert(0, os.path.dirname(__file__))
 
-from rag_chain import load_vectorstore, build_rag_chain, ask
+from rag_chain import hybrid_retrieve, load_vectorstore, build_rag_chain, ask
 from groq import Groq
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
@@ -135,7 +135,7 @@ Respond with ONLY a decimal number between 0.0 and 1.0. Nothing else."""
 def run_evaluation():
     print("Loading RAG system...")
     vectorstore      = load_vectorstore()
-    chain, retriever = build_rag_chain(vectorstore)
+    chain, bm25, docs = build_rag_chain(vectorstore)
 
     print(f"\nEvaluating {len(eval_questions)} questions...\n")
 
@@ -147,9 +147,11 @@ def run_evaluation():
         print(f"[{i}/{len(eval_questions)}] {q[:60]}...")
 
         # Get RAG answer + retrieved chunks
-        result       = ask(chain, retriever, q)
+        result = ask((chain, vectorstore, bm25, docs), q, [])
         answer       = result["answer"]
-        raw_docs     = retriever.invoke(q)
+        from rag_chain import hybrid_retrieve, rerank
+        candidates = hybrid_retrieve(q, vectorstore, bm25, docs)
+        raw_docs   = rerank(q, candidates)
         contexts     = [doc.page_content for doc in raw_docs]
 
         # Score each metric

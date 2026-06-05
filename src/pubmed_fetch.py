@@ -5,8 +5,9 @@ from Bio import Entrez
 
 Entrez.email = "pavithra22pavz@gmail.com"
 
-SEARCH_QUERY = "large language models clinical decision support"
+SEARCH_QUERY = "AI hallucination medical safety clinical"
 MAX_ARTICLES = 80
+
 
 def fetch_pubmed_ids(query, max_results):
     print(f"Searching PubMed for: '{query}'...")
@@ -17,10 +18,12 @@ def fetch_pubmed_ids(query, max_results):
     print(f"Found {len(ids)} articles.")
     return ids
 
+
 def fetch_abstracts(pmids):
     print("Fetching abstracts...")
     articles = []
     batch_size = 20
+
     for i in range(0, len(pmids), batch_size):
         batch = pmids[i : i + batch_size]
         handle = Entrez.efetch(
@@ -31,6 +34,7 @@ def fetch_abstracts(pmids):
         )
         records = Entrez.read(handle)
         handle.close()
+
         for record in records["PubmedArticle"]:
             try:
                 article = record["MedlineCitation"]["Article"]
@@ -54,12 +58,16 @@ def fetch_abstracts(pmids):
 
                 pmid = str(record["MedlineCitation"]["PMID"])
 
+                # Clean text — remove non-ascii characters
+                title    = title.encode("ascii", "ignore").decode()
+                abstract = abstract.encode("ascii", "ignore").decode()
+
                 articles.append({
-                    "pmid": pmid,
-                    "title": title,
+                    "pmid":     pmid,
+                    "title":    title,
                     "abstract": abstract,
-                    "year": year,
-                    "source": f"PubMed PMID {pmid} ({year}): {title}"
+                    "year":     year,
+                    "source":   f"PubMed PMID {pmid} ({year}): {title}"
                 })
 
             except Exception as e:
@@ -71,20 +79,31 @@ def fetch_abstracts(pmids):
 
     return articles
 
+
 def save_articles(articles, output_path):
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else ".", exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(articles, f, indent=2, ensure_ascii=False)
     print(f"\nSaved {len(articles)} articles to {output_path}")
 
 
 if __name__ == "__main__":
+    # Load existing articles
+    existing = []
+    if os.path.exists("data/abstracts.json"):
+        with open("data/abstracts.json", "r", encoding="utf-8") as f:
+            existing = json.load(f)
+        print(f"Loaded {len(existing)} existing articles")
+
+    # Fetch new ones
     pmids    = fetch_pubmed_ids(SEARCH_QUERY, MAX_ARTICLES)
     articles = fetch_abstracts(pmids)
-    save_articles(articles, "data/abstracts.json")
 
-    if articles:
-        print("\n── Sample Article ──")
-        print(f"Title:    {articles[0]['title']}")
-        print(f"PMID:     {articles[0]['pmid']}")
-        print(f"Abstract: {articles[0]['abstract'][:200]}...")
+    # Combine — deduplicate by PMID
+    all_pmids = {a["pmid"] for a in existing}
+    new_only  = [a for a in articles if a["pmid"] not in all_pmids]
+    combined  = existing + new_only
+
+    save_articles(combined, "data/abstracts.json")
+    print(f"Total articles now: {len(combined)}")
+    print(f"New articles added: {len(new_only)}")

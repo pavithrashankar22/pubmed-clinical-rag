@@ -16,9 +16,11 @@ load_dotenv()
 
 FAISS_INDEX_PATH = "faiss_index"
 GROQ_MODEL       = "llama-3.1-8b-instant"
-FAISS_TOP_K      = 10   # wide net for hybrid retrieval
-RERANK_TOP_K     = 3    # best 3 after reranking
-MAX_HISTORY      = 4    # remember last 4 exchanges
+FAISS_TOP_K      = 15
+MAX_HISTORY      = 4
+
+# Load cross-encoder once at module level — not per query
+RERANKER = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
 CLINICAL_RAG_PROMPT = PromptTemplate.from_template("""
 You are a clinical research assistant helping healthcare professionals
@@ -44,6 +46,7 @@ QUESTION: {question}
 ANSWER (with citations):
 """)
 
+
 def load_vectorstore():
     print("Loading embedding model...")
     embeddings = HuggingFaceEmbeddings(
@@ -60,37 +63,22 @@ def load_vectorstore():
     print("Vector store ready!")
     return vectorstore
 
+
 def build_bm25_index(vectorstore):
     """
     Build a BM25 keyword index from the same documents in FAISS.
-
-    BM25 (Best Match 25) is a classic keyword ranking algorithm.
-    It finds documents containing the exact words in your query.
-
-    Why use both FAISS + BM25?
-      FAISS finds semantically similar chunks — good for meaning
-      BM25 finds exact keyword matches — good for specific terms
-      Together they catch what either alone would miss.
+    BM25 finds exact keyword matches — complements FAISS semantic search.
     """
-    # Extract all documents stored in FAISS
-    docs = list(vectorstore.docstore._dict.values())
-
-    # Tokenize each document for BM25
-    # Simple whitespace tokenization works well for medical text
+    docs      = list(vectorstore.docstore._dict.values())
     tokenized = [doc.page_content.lower().split() for doc in docs]
-
-    bm25  = BM25Okapi(tokenized)
+    bm25      = BM25Okapi(tokenized)
     return bm25, docs
+
 
 def hybrid_retrieve(question, vectorstore, bm25, docs, k=FAISS_TOP_K):
     """
     Hybrid retrieval = FAISS semantic search + BM25 keyword search.
-
-    How it works:
-      1. FAISS returns top-k chunks by vector similarity
-      2. BM25 returns top-k chunks by keyword match
-      3. We merge both lists, remove duplicates
-      4. Result is a richer, more complete candidate set
+    Merges both result lists and deduplicates.
     """
     # FAISS semantic search
     faiss_results = vectorstore.similarity_search(question, k=k)
@@ -98,7 +86,6 @@ def hybrid_retrieve(question, vectorstore, bm25, docs, k=FAISS_TOP_K):
     # BM25 keyword search
     tokens       = question.lower().split()
     bm25_scores  = bm25.get_scores(tokens)
-    # Get top-k indices sorted by BM25 score
     top_bm25_idx = sorted(
         range(len(bm25_scores)),
         key=lambda i: bm25_scores[i],
@@ -106,8 +93,8 @@ def hybrid_retrieve(question, vectorstore, bm25, docs, k=FAISS_TOP_K):
     )[:k]
     bm25_results = [docs[i] for i in top_bm25_idx]
 
-    # Merge both result lists — deduplicate by content
-    seen    = set()
+    # Merge and deduplicate
+    seen     = set()
     combined = []
     for doc in faiss_results + bm25_results:
         if doc.page_content not in seen:
@@ -117,36 +104,22 @@ def hybrid_retrieve(question, vectorstore, bm25, docs, k=FAISS_TOP_K):
     return combined
 
 
-def rerank(question, candidates, top_k=RERANK_TOP_K):
+def rerank(question, candidates, top_k=3):
     """
-    Reranking with a cross-encoder model.
-
-    Why rerank?
-      FAISS and BM25 use fast approximate scoring.
-      A cross-encoder reads BOTH the question AND each chunk
-      together — much more accurate but slower.
-      So we use it only on the small candidate set (10 docs)
-      not on the entire corpus.
-
-    Model: ms-marco-MiniLM-L-6-v2
-      - Trained specifically for passage ranking
-      - Fast, small, free
-      - Returns relevance score for each (question, chunk) pair
+    Cross-encoder reranking.
+    Scores each (question, chunk) pair together for precise relevance.
     """
     print("  Reranking candidates...")
-    encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
-
-    # Score each candidate against the question
     pairs  = [(question, doc.page_content) for doc in candidates]
-    scores = encoder.predict(pairs)
+    scores = RERANKER.predict(pairs)
 
-    # Sort by score descending, keep top_k
     ranked = sorted(
         zip(scores, candidates),
         key=lambda x: x[0],
         reverse=True
     )
     return [doc for _, doc in ranked[:top_k]]
+
 
 def format_docs_with_sources(docs):
     """Format retrieved chunks with source labels for the prompt."""
@@ -159,15 +132,13 @@ def format_docs_with_sources(docs):
 
 def format_chat_history(history):
     """
-    Format conversation history for injection into prompt.
-    history is a list of {"question": ..., "answer": ...} dicts.
-    We keep only the last MAX_HISTORY exchanges.
+    Format conversation history for prompt injection.
+    Keeps last MAX_HISTORY exchanges only.
     """
     if not history:
         return "No previous conversation."
-
-    recent  = history[-MAX_HISTORY:]
-    lines   = []
+    recent = history[-MAX_HISTORY:]
+    lines  = []
     for turn in recent:
         lines.append(f"User: {turn['question']}")
         lines.append(f"Assistant: {turn['answer']}")
@@ -175,36 +146,24 @@ def format_chat_history(history):
 
 
 def build_rag_chain(vectorstore):
-    """
-    Build upgraded RAG chain.
-    Returns chain, vectorstore, bm25, docs — all needed for ask()
-    """
+    """Build the RAG chain — returns chain, bm25, docs."""
     llm = ChatGroq(
         model=GROQ_MODEL,
         temperature=0.1,
         max_tokens=512
     )
-
-    # Build BM25 index from same docs as FAISS
     bm25, docs = build_bm25_index(vectorstore)
-
-    # Simple chain — just LLM + prompt
-    # Retrieval now happens manually in ask() using hybrid + rerank
-    chain = CLINICAL_RAG_PROMPT | llm | StrOutputParser()
-
+    chain      = CLINICAL_RAG_PROMPT | llm | StrOutputParser()
     return chain, bm25, docs
 
 
 def ask(chain_tuple, question, history=None):
     """
-    Full upgraded pipeline:
+    Full pipeline:
       1. Hybrid retrieval (FAISS + BM25)
       2. Cross-encoder reranking
-      3. Inject chat history into prompt
-      4. Generate grounded answer
-
-    chain_tuple = (chain, vectorstore, bm25, docs)
-    history     = list of past {"question", "answer"} dicts
+      3. Inject chat history
+      4. Generate grounded answer with citations
     """
     chain, vectorstore, bm25, docs = chain_tuple
 
@@ -214,19 +173,15 @@ def ask(chain_tuple, question, history=None):
     print(f"\nQuestion: {question}")
     print("Running hybrid retrieval...")
 
-    # Step 1 — Hybrid retrieval
-    candidates = hybrid_retrieve(question, vectorstore, bm25, docs)
+    candidates   = hybrid_retrieve(question, vectorstore, bm25, docs)
     print(f"  Retrieved {len(candidates)} candidates")
 
-    # Step 2 — Rerank
-    top_docs   = rerank(question, candidates)
+    top_docs     = rerank(question, candidates)
     print(f"  Reranked to top {len(top_docs)}")
 
-    # Step 3 — Format context + history
     context      = format_docs_with_sources(top_docs)
     chat_history = format_chat_history(history)
 
-    # Step 4 — Generate answer
     answer = chain.invoke({
         "context":      context,
         "chat_history": chat_history,
@@ -247,18 +202,15 @@ if __name__ == "__main__":
         print("ERROR: GROQ_API_KEY not found in .env file")
         exit(1)
 
-    vectorstore      = load_vectorstore()
-    chain_tuple      = build_rag_chain(vectorstore)
+    vectorstore       = load_vectorstore()
+    chain_tuple       = build_rag_chain(vectorstore)
     chain, bm25, docs = chain_tuple
+    history           = []
 
-    # conversation history — starts empty
-    history = []
-
-    # Test conversational memory with follow-up questions
     questions = [
         "What are the risks of hallucination in medical AI?",
-        "How can those risks be mitigated?",    # follow-up — needs memory
-        "Which of those methods is most practical?",  # follow-up again
+        "How can those risks be mitigated?",
+        "Which of those methods is most practical?",
     ]
 
     for question in questions:
@@ -274,7 +226,6 @@ if __name__ == "__main__":
             print(f"  - {src}")
         print("=" * 60)
 
-        # Add to history for next question
         history.append({
             "question": question,
             "answer":   result["answer"]

@@ -7,8 +7,8 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 DATA_PATH        = "data/abstracts.json"
 FAISS_INDEX_PATH = "faiss_index"
-CHUNK_SIZE       = 500
-CHUNK_OVERLAP    = 50
+CHUNK_SIZE       = 300
+CHUNK_OVERLAP    = 75
 
 def load_articles(path):
     with open(path, "r", encoding="utf-8") as f:
