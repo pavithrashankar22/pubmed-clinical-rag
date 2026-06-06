@@ -99,30 +99,6 @@ streamlit run src/app.py
 # 6. Run full evaluation + ablation study (optional — 30-40 mins)
 python src/ablation_eval.py
 
-Project Structure
-pubmed-clinical-rag/
-├── src/
-│   ├── pubmed_fetch.py      ← fetch + clean PubMed abstracts
-│   ├── build_index.py       ← chunk + embed + FAISS index
-│   ├── rag_chain.py         ← hybrid retrieval + reranking + memory
-│   ├── evaluate.py          ← 5-question evaluation
-│   ├── ablation_eval.py     ← 25-question eval + ablation study
-│   └── app.py               ← Streamlit UI
-├── data/
-│   └── abstracts.json       ← 228 PubMed articles
-├── results/
-│   ├── evaluation_25q.json  ← full 25-question evaluation results
-│   ├── evaluation_25q.csv
-│   ├── ablation_study.json  ← ablation study results
-│   └── ablation_study.csv
-├── screenshots/
-│   ├── demo_answer.png      ← answer with citations
-│   ├── raw_chunks.png       ← retrieved source chunks
-│   └── memory_demo.png      ← conversational memory demo
-├── .env.example
-├── requirements.txt
-└── README.md
-
 Sample Questions to Try
 
 How do large language models help with clinical decision support?
@@ -137,10 +113,15 @@ How does label noise affect model performance in clinical NLP?
 Limitations
 
 Abstracts only — searches PubMed abstracts, not full paper text. Some answers may lack depth due to abstract-level detail.
+
 Static corpus — 228 articles fetched at build time. Re-run pubmed_fetch.py and build_index.py to incorporate new publications.
+
 Context recall ceiling — current recall score of 0.620 reflects corpus size. Expanding to 500+ articles would improve retrieval coverage.
+
 LLM variability — Groq LLaMA-3.1 may occasionally drift from retrieved context despite prompt constraints. Faithfulness score of 0.680 reflects this.
+
 No full-text access — PubMed E-utilities provides abstracts only. Full-text retrieval would require PMC Open Access API integration.
+
 Not for clinical use — research and portfolio demonstration only. Not validated for medical decision making.
 
 
