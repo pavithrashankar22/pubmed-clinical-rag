@@ -1,0 +1,209 @@
+{
+  "total_questions": 25,
+  "avg_faithfulness": 0.716,
+  "avg_answer_relevancy": 0.724,
+  "avg_context_recall": 0.6,
+  "avg_overall": 0.68,
+  "results": [
+    {
+      "question": "How do large language models support clinical decision making?",
+      "answer": "Large language models (LLMs) support clinical decision making by providing relevant, accurate, and comprehensive outputs, depending on prompt engineering (1). They can be utilized to automate the comparison and integration of evolving clinical practice guidelines into clinical decision support systems (2). Additionally, LLMs can be used to support clinical education and decision-making in various domains, including pelvic floor physiotherapy (1). However, their high computational and energy demands can be mitigated by using smaller language models with retrieval-augmented generation (3).\n\nReferences:\n1. Shaping AI in Pelvic Floor Physiotherapy: The Impact of Role-Play Prompting on ChatGPT Response Quality. PubMed PMID 42217017 (2026)\n2. Using Large Language Models to Automate the Comparison and Integration of Evolving Clinical Practice Guidelines into Clinical Decision Support Systems. PubMed PMID 42174844 (2026)\n3. Low-energy small language models with retrieval-augmented generation can surpass large-model performance in rheumatology. PubMed PMID 42180760 (2026)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.7000000000000001
+    },
+    {
+      "question": "What are the challenges of implementing LLMs in hospital settings?",
+      "answer": "The challenges of implementing Large Language Models (LLMs) in hospital settings include:\n\n1. Hallucination mitigation: LLMs may produce information that is not grounded in reality, which can lead to incorrect diagnoses or treatment decisions (Source 1: PMID 40150453, Source 2: PMID 38551772).\n2. Addressing biases: LLMs can perpetuate existing biases in healthcare data, leading to unfair treatment of certain patient populations (Source 1: PMID 40150453).\n3. Ensuring patient privacy and data security: LLMs require access to sensitive patient data, which must be protected to maintain confidentiality and prevent data breaches (Source 1: PMID 40150453).\n4. Information hallucinations: LLMs may generate information that is not based on actual data, which can affect clinical reliability (Source 2: PMID 38551772).\n\nThese challenges highlight the need for careful integration of LLMs into hospital settings to ensure safe and effective use in clinical decision-making.",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8333333333333334
+    },
+    {
+      "question": "How accurate are LLMs for medical diagnosis assistance?",
+      "answer": "According to the studies, the accuracy of Large Language Models (LLMs) for medical diagnosis assistance varies depending on the specific domain and category. \n\nIn emergency internal medicine diseases, LLMs outperformed EDJPs (Emergency Department Junior Physicians) in diagnostic accuracy, differential diagnosis comprehensiveness, and response efficiency [1]. \n\nHowever, in the diagnosis and examination category for axial spondyloarthritis, LLM accuracy was high (mean score 20.4, SD 0.9) [2]. \n\nOn the other hand, LLM accuracy was lower in treatment and medication domains for axial spondyloarthritis (mean score 19.3, SD 1.7) [2]. \n\nIt's also worth noting that the most accurate LLM tested in an audit study of automated psychiatric diagnoses was the Generative Pretrained Transformer 4o [3].\n\nReferences:\n[1] PubMed PMID 42180499 (2026)\n[2] PubMed PMID 41499772 (2026)\n[3] PubMed PMID 42221464 (2026)",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8333333333333334
+    },
+    {
+      "question": "What are the risks of using generative AI in clinical workflows?",
+      "answer": "The risks of using generative AI in clinical workflows include hallucinations and automation bias (1). These risks can be mitigated by embedding generative-system risks within routine workflows and emphasizing manual-mode readiness when AI reliability is compromised (1).\n\nReference:\n1. Beyond literacy to clinical competency: A framework for integrating generative AI into nursing education. PubMed PMID 41950601 (2026)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.5,
+      "context_recall": 0.8,
+      "overall": 0.7000000000000001
+    },
+    {
+      "question": "What evaluation frameworks exist for clinical LLM systems?",
+      "answer": "According to Source 2, \"Large Language Models for Health Knowledge Modelling in Data Interoperability: A Scoping Review of Methods, Standards, and Applications\" (PMID 42175079, 2026), standardized evaluation benchmarks and explainable frameworks are essential for trustworthy adoption of clinical LLM systems.\n\nAdditionally, Source 1 mentions the evaluation of three frameworks for extracting interpretable features from clinical notes: rule-based (M1), zero-shot LLM with retrieval-augmented generation (M2), and hybrid combining symbolic pre-filtering with LLM quantification (M3) (PMID 42175001, 2026).\n\nHowever, these frameworks are specific to feature extraction and sepsis prediction, and not general evaluation frameworks for clinical LLM systems.\n\nTherefore, the answer is that standardized evaluation benchmarks and explainable frameworks are essential for trustworthy adoption of clinical LLM systems, but specific frameworks may vary depending on the application and task (1, 2).\n\nReferences:\n1. PubMed PMID 42175079 (2026)\n2. PubMed PMID 42175001 (2026)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.7000000000000001
+    },
+    {
+      "question": "How is GPT-4 being used in healthcare settings?",
+      "answer": "GPT-4 is being used in healthcare settings for various purposes, including writing discharge letters for primary care providers (1) and providing patient education on medical topics such as scars and keloids (2). Additionally, GPT-4 has been evaluated for its ability to respond to clinical queries on tapering antidepressants, with results showing that its responses were relevant and within scope, and often incorporated safety netting (3).\n\nReferences:\n1. PubMed PMID 39047282 (2024)\n2. PubMed PMID 41773665 (2026)\n3. PubMed PMID 40579346 (2025)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8000000000000002
+    },
+    {
+      "question": "What are the ethical concerns of AI in clinical decision making?",
+      "answer": "The ethical concerns of AI in clinical decision making include:\n\n1. Fabricated references, distorted clinical reasoning, or overconfident recommendations (1).\n2. Automation bias, where clinicians may inadvertently rely on algorithmic outputs (1).\n3. Opacity in AI decision-making processes (1).\n4. Responsibility for clinical judgment, patient safety, and ethical decision-making must remain with the clinician (2).\n5. Ethical and regulatory considerations, including data protection and AI-specific guidelines, must be addressed to ensure responsible AI deployment (3).\n\nReferences:\n1. Ghatak T. Artificial Intelligence Literacy in Intensive Care: From Algorithmic Fluency to Clinical Accountability. PubMed PMID: 42147713 (2026)\n2. Ghatak T. Artificial Intelligence Literacy in Intensive Care: From Algorithmic Fluency to Clinical Accountability. PubMed PMID: 42147713 (2026)\n3. Utilizing large language models for gastroenterology research: a conceptual framework. PubMed PMID: 40171241 (2025)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8000000000000002
+    },
+    {
+      "question": "How do LLMs compare to traditional clinical decision support systems?",
+      "answer": "The retrieved articles do not fully address this question. However, we can infer that LLMs may have comparable or even surpassing performance compared to traditional clinical decision support systems, as suggested by the studies on LLMs in dry eye disease (Source 1) and rheumatology (Source 2). Additionally, LLMs have been shown to be feasible as decision support tools in oncology (Source 3). \n\nTo answer the question directly, we would need studies comparing LLMs to traditional clinical decision support systems.",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.5,
+      "context_recall": 0.5,
+      "overall": 0.5
+    },
+    {
+      "question": "How is NLP used to extract information from electronic health records?",
+      "answer": "NLP can extract information from electronic health records (EHRs) with moderate accuracy, supporting its feasibility for larger-scale extraction (1). Additionally, NLP can be used to extract specific information such as ejection fraction and strain from cardiovascular imaging reports (3). Its ability to extract information, summarize records, and support clinical workflows makes it a potential tool for enhancing documentation efficiency and secondary application in EHR data analysis (2).\n\nReferences:\n1. PubMed PMID 42159872 (2026)\n2. PubMed PMID 42201162 (2026)\n3. PubMed PMID 42232873 (2026)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.7000000000000001
+    },
+    {
+      "question": "What are the best models for clinical named entity recognition?",
+      "answer": "Based on the provided PubMed articles, the best models for clinical named entity recognition are:\n\n1. LLaMA3-8B model (Source 1: PubMed PMID 40821282, 2025) - used in the context-aware retrieval-augmented generation system for urology.\n2. Small Language Models (Source 2: PubMed PMID 41282683, 2025) - enhanced by clinician expertise and prompt engineering for cancer entity recognition in electronic health records.\n3. SURROGATOR Framework's underlying model (Source 3: PubMed PMID 42175112, 2026) - although not explicitly stated, it is implied to be a high-performing model for named entity recognition, with an F1-score of 0.73.\n\nThese models demonstrate varying degrees of success in clinical named entity recognition, and further research is needed to determine their relative strengths and weaknesses.",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.6
+    },
+    {
+      "question": "How do transformer models perform on medical text classification?",
+      "answer": "Transformer models, such as the Bidirectional Encoder Representations from Transformers (BERT) variants, have shown promising performance on medical text classification tasks. \n\nIn a study evaluating multimodal prediction of renal tumor malignancy from radiology reports and structured electronic health records, four locally deployed Large Language Models (LLMs) were evaluated against manual annotations of 500 reports, using kidney-specific text encoded using pretrained biomedical transformer models, including radiology BERT variants [1].\n\nHowever, in another study, lightweight and interpretable text models outperformed transformer-based approaches in an imbalanced next-day discharge prediction task [2].\n\nIt is worth noting that the performance of transformer models can vary depending on the specific task and dataset.\n\nReferences:\n[1] PubMed PMID 42202288 (2026)\n[2] PubMed PMID 42175009 (2026)",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.6
+    },
+    {
+      "question": "What challenges exist in processing unstructured clinical notes?",
+      "answer": "The challenges in processing unstructured clinical notes include their unstructured nature, which makes it difficult to extract clinically useful information [1]. Additionally, the unstructured outputs of Large Language Models (LLMs) pose significant challenges for integration into clinical data pipelines [2].\n\nReferences:\n[1] PubMed PMID 42174981 (2026): A Two-Stage Pipeline for Linking Clinical Notes to SNOMED CT.\n[2] PubMed PMID 42175392 (2026): Context-Free Grammar-Guided Generation of FHIR Resources Using Large Language Models.",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.7000000000000001
+    },
+    {
+      "question": "How is BERT used for clinical NLP tasks?",
+      "answer": "The retrieved articles do not fully address the question of how BERT is used for clinical NLP tasks. However, based on the context provided, it appears that other language models such as spaCy (Source 3) and LLM-NLP (Source 3) are used for clinical NLP tasks, but BERT is not explicitly mentioned.\n\nIf you would like to know more about BERT's application in clinical NLP, I would need more information or context.",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.5,
+      "context_recall": 0.0,
+      "overall": 0.3333333333333333
+    },
+    {
+      "question": "What is the role of NLP in automated clinical coding?",
+      "answer": "NLP plays a crucial role in automated clinical coding by offering a scalable approach for extracting structured clinical information directly from clinical text, such as discharge summaries (Source 1: PMID 42175002, 2026). This can help reduce label noise and improve the accuracy of ICD-10 diagnosis codes.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0,
+      "context_recall": 0.5,
+      "overall": 0.7666666666666666
+    },
+    {
+      "question": "How can NLP improve patient discharge summary analysis?",
+      "answer": "NLP can improve patient discharge summary analysis by extracting signs and symptoms with moderate accuracy, as demonstrated in a study using natural language processing (NLP) to extract signs and symptoms of hypertensive disorders in pregnancy from clinical notes (1). Additionally, NLP can be used to generate patient-centred discharge instructions, which can improve adherence and outcomes (2). However, future research is needed to improve NLP performance, including expanding annotated data (1).\n\nReferences:\n1. PubMed PMID 42159872 (2026): Extracting Signs and Symptoms of Hypertensive Disorders in Pregnancy from Clinical Notes Using Natural Language Processing.\n2. PubMed PMID 39567722 (2024): The quality and safety of using generative AI to produce patient-centred discharge instructions.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8000000000000002
+    },
+    {
+      "question": "What datasets exist for training clinical NLP models?",
+      "answer": "The retrieved articles do not fully address this question. However, they provide some information on the use of natural language processing (NLP) in various clinical applications.\n\nSource 1 mentions that algorithm training is essential for NLP, but it does not specify the datasets used for training (1).\n\nSource 2 discusses the use of NLP for identifying cancer-associated thrombosis events, but it does not provide information on the datasets used for training the models (2).\n\nSource 3 describes the integration and harmonization of multi-source obstetric data using rule-based NLP, but it does not mention the specific datasets used for training (3).\n\nTo answer the question, we would need to search for articles that specifically address the datasets used for training clinical NLP models.\n\nReferences:\n1. PubMed PMID 42232873 (2026)\n2. PubMed PMID 42158042 (2026)\n3. PubMed PMID 42175150 (2026)",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.0,
+      "context_recall": 0.5,
+      "overall": 0.3333333333333333
+    },
+    {
+      "question": "What are the risks of hallucination in medical AI systems?",
+      "answer": "The risks of hallucination in medical AI systems include:\n\n* Safety risks, including incorrect diagnoses or treatment recommendations (Source 2: PMID 41950601)\n* Eroding trust and patient safety (Source 3: PMID 41966058)\n* Hallucination mitigation is a key challenge in medical AI, as addressed in the context-aware retrieval-augmented generation for artificial intelligence in urology (Source 1: PMID 40821282)\n\nReferences:\n1. Context-Aware Retrieval-Augmented Generation for Artificial Intelligence in Urology. PubMed PMID: 40821282 (2025)\n2. Beyond literacy to clinical competency: A framework for integrating generative AI into nursing education. PubMed PMID: 41950601 (2026)\n3. Artificial intelligence in personalized prescription: A narrative review of promise, peril, and practicality. PubMed PMID: 41966058 (2026)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8000000000000002
+    },
+    {
+      "question": "How does RAG reduce hallucination in medical question answering?",
+      "answer": "RAG (Retrieval-Augmented Generation) reduces hallucination in medical question answering by leveraging a knowledge graph or ontology to provide context and evidence-based information, as seen in the GraphRAG framework (Source 2, PMID 41610815, 2026). This approach helps to mitigate hallucinations by grounding the model's responses in verifiable data, making them more accurate and relevant (Source 2, PMID 41610815, 2026).\n\nAdditionally, studies have shown that RAG can improve the performance of AI models in generating medically appropriate answers, with a significant reduction in hallucinations (Source 3, PMID 40821282, 2025).",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.9,
+      "context_recall": 0.5,
+      "overall": 0.7666666666666666
+    },
+    {
+      "question": "What methods exist to detect hallucination in LLM outputs?",
+      "answer": "According to Source 1, guidelines and qualitative methods were employed to describe the issue of hallucinations in the model outputs of large language model-generated educational content on hemodialysis complications [1]. \n\nAdditionally, Source 2 mentions that the MEDAI-LLM-SUMM reporting checklist uniquely addresses hallucination assessment requirements [2]. \n\nSource 3 also highlights the limitation of LLMs due to hallucinations, which suggests that detecting hallucinations is crucial for their reliability [3].\n\nHowever, the specific methods for detecting hallucinations in LLM outputs are not explicitly mentioned in these articles. \n\nTherefore, I would recommend consulting the MEDAI-LLM-SUMM reporting checklist for guidance on assessing hallucinations in LLM outputs [2].\n\nReferences:\n[1] PubMed PMID 42185773 (2026)\n[2] PubMed PMID 41847286 (2026)\n[3] PubMed PMID 41425735 (2025)",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.5,
+      "context_recall": 0.5,
+      "overall": 0.6
+    },
+    {
+      "question": "How can prompt engineering reduce hallucination in clinical AI?",
+      "answer": "According to the retrieved articles, technical optimization through knowledge graphs and multi-stage training can significantly reduce hallucinations in clinical AI [1]. Additionally, prompt engineering may play a crucial role in reducing hallucination by providing clear and specific input to the AI model, thus minimizing the likelihood of incorrect or irrelevant information being generated.\n\nHowever, the retrieved articles do not provide specific information on how prompt engineering can reduce hallucination in clinical AI. Further research is needed to explore this topic.\n\nReferences:\n[1] PubMed PMID 40983876 (2025): Strategies for the Analysis and Elimination of Hallucinations in Artificial Intelligence Generated Medical Knowledge.",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.5,
+      "context_recall": 0.5,
+      "overall": 0.5
+    },
+    {
+      "question": "What is the impact of AI hallucination on patient safety?",
+      "answer": "AI hallucinations can compromise patient safety by generating inaccurate or irrelevant responses, which may lead to misinformed clinical decision-making (1, 2). This issue is particularly concerning in low-probability, high-stakes scenarios, such as rare adverse safety events or medical errors (3).\n\nReferences:\n1. PubMed PMID 40821282 (2025): Context-Aware Retrieval-Augmented Generation for Artificial Intelligence in Urology.\n2. PubMed PMID 40983876 (2025): Strategies for the Analysis and Elimination of Hallucinations in Artificial Intelligence Generated Medical Knowledge.\n3. PubMed PMID 41445638 (2025): A medically grounded LLM agent-based tool to detect patient safety events in medical records: Identifying patient safety events with large language models.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.8,
+      "overall": 0.8000000000000002
+    },
+    {
+      "question": "How do researchers evaluate faithfulness in medical AI systems?",
+      "answer": "Researchers evaluate faithfulness in medical AI systems by examining eight factors, including faithfulness itself, as identified in a study evaluating the interpretability of clinical speech AI models (1). These factors also include computational efficiency, cognitive load, human-AI task performance, mental model, user trust, clinical understandability, and decision relevance.\n\nReference:\n1. Evaluating the interpretability of clinical speech AI models: Lessons from two user studies. PubMed PMID: 42221683 (2027)",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.6
+    },
+    {
+      "question": "What are the limitations of LLMs in high-stakes medical decisions?",
+      "answer": "The limitations of LLMs in high-stakes medical decisions include:\n\n1. Hallucination: LLMs may generate incorrect information (Source 1, PMID 40512795, 2025).\n2. Lack of common sense: LLMs may not possess the same level of common sense as humans (Source 1, PMID 40512795, 2025).\n3. Bias: LLMs may be biased, which can lead to unfair or inaccurate decisions (Source 1, PMID 40512795, 2025).\n4. Inability to replace professional medical judgment: LLMs should not replace physician judgment in treatment decisions (Source 2, PMID 42158685, 2026).\n5. Need for mandatory physician verification: High-performing LLMs should be restricted to narrowly defined procedural questions and require physician verification (Source 2, PMID 42158685, 2026).\n\nThese limitations highlight the importance of using LLMs in conjunction with human judgment and oversight in high-stakes medical decisions.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.9,
+      "context_recall": 0.8,
+      "overall": 0.8333333333333334
+    },
+    {
+      "question": "How does retrieval augmented generation improve medical AI reliability?",
+      "answer": "Retrieval-augmented generation (RAG) improves medical AI reliability by combining generative models with document retrieval mechanisms, enhancing response accuracy and contextual relevance (1, 2, 3). This approach supplies large language models (LLMs) with authoritative guideline content during response generation, potentially improving accuracy and safety (2).\n\nReferences:\n1. PubMed PMID 41134117 (2025): Development and Evaluation of a Retrieval-Augmented Generation Chatbot for Orthopedic and Trauma Surgery Patient Education: Mixed-Methods Study.\n2. PubMed PMID 42202642 (2026): Guideline-Integrated Large Language Models Improve Decision Support for Acute Ear, Nose and Throat Emergencies.\n3. PubMed PMID 40821282 (2025): Context-Aware Retrieval-Augmented Generation for Artificial Intelligence in Urology.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.7000000000000001
+    },
+    {
+      "question": "What regulatory frameworks exist for AI safety in healthcare?",
+      "answer": "According to Source 3 (PubMed PMID 40171241, 2025), several regulatory frameworks exist for AI safety in healthcare, including:\n\n1. Health Insurance Portability and Accountability Act (HIPAA)\n2. General Data Protection Regulation (GDPR)\n3. DECIDE-AI guidelines\n4. SPIRIT-AI guidelines\n5. CONSORT-AI guidelines\n\nThese frameworks aim to ensure responsible AI deployment and mitigate risks associated with artificial intelligence in healthcare.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_recall": 0.5,
+      "overall": 0.7000000000000001
+    }
+  ]
+}

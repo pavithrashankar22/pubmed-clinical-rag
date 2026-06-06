@@ -1,0 +1,26 @@
+question,faithfulness,answer_relevancy,context_recall,overall
+How do large language models support clinical decision making?,0.8,0.8,0.5,0.7000000000000001
+What are the challenges of implementing LLMs in hospital settings?,0.9,0.8,0.8,0.8333333333333334
+How accurate are LLMs for medical diagnosis assistance?,0.9,0.8,0.8,0.8333333333333334
+What are the risks of using generative AI in clinical workflows?,0.8,0.5,0.8,0.7000000000000001
+What evaluation frameworks exist for clinical LLM systems?,0.8,0.8,0.5,0.7000000000000001
+How is GPT-4 being used in healthcare settings?,0.8,0.8,0.8,0.8000000000000002
+What are the ethical concerns of AI in clinical decision making?,0.8,0.8,0.8,0.8000000000000002
+How do LLMs compare to traditional clinical decision support systems?,0.5,0.5,0.5,0.5
+How is NLP used to extract information from electronic health records?,0.8,0.8,0.5,0.7000000000000001
+What are the best models for clinical named entity recognition?,0.5,0.8,0.5,0.6
+How do transformer models perform on medical text classification?,0.5,0.8,0.5,0.6
+What challenges exist in processing unstructured clinical notes?,0.5,0.8,0.8,0.7000000000000001
+How is BERT used for clinical NLP tasks?,0.5,0.5,0.0,0.3333333333333333
+What is the role of NLP in automated clinical coding?,0.8,1.0,0.5,0.7666666666666666
+How can NLP improve patient discharge summary analysis?,0.8,0.8,0.8,0.8000000000000002
+What datasets exist for training clinical NLP models?,0.5,0.0,0.5,0.3333333333333333
+What are the risks of hallucination in medical AI systems?,0.8,0.8,0.8,0.8000000000000002
+How does RAG reduce hallucination in medical question answering?,0.9,0.9,0.5,0.7666666666666666
+What methods exist to detect hallucination in LLM outputs?,0.8,0.5,0.5,0.6
+How can prompt engineering reduce hallucination in clinical AI?,0.5,0.5,0.5,0.5
+What is the impact of AI hallucination on patient safety?,0.8,0.8,0.8,0.8000000000000002
+How do researchers evaluate faithfulness in medical AI systems?,0.5,0.8,0.5,0.6
+What are the limitations of LLMs in high-stakes medical decisions?,0.8,0.9,0.8,0.8333333333333334
+How does retrieval augmented generation improve medical AI reliability?,0.8,0.8,0.5,0.7000000000000001
+What regulatory frameworks exist for AI safety in healthcare?,0.8,0.8,0.5,0.7000000000000001

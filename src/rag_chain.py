@@ -15,9 +15,9 @@ from sentence_transformers import CrossEncoder
 load_dotenv()
 
 FAISS_INDEX_PATH = "faiss_index"
-GROQ_MODEL       = "llama-3.1-8b-instant"
-FAISS_TOP_K      = 15
-MAX_HISTORY      = 4
+GROQ_MODEL = "llama-3.1-8b-instant"
+FAISS_TOP_K = 15
+MAX_HISTORY = 4
 
 # Load cross-encoder once at module level — not per query
 RERANKER = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
@@ -52,13 +52,11 @@ def load_vectorstore():
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True}
+        encode_kwargs={"normalize_embeddings": True},
     )
     print(f"Loading FAISS index from {FAISS_INDEX_PATH}/...")
     vectorstore = FAISS.load_local(
-        FAISS_INDEX_PATH,
-        embeddings,
-        allow_dangerous_deserialization=True
+        FAISS_INDEX_PATH, embeddings, allow_dangerous_deserialization=True
     )
     print("Vector store ready!")
     return vectorstore
@@ -69,9 +67,9 @@ def build_bm25_index(vectorstore):
     Build a BM25 keyword index from the same documents in FAISS.
     BM25 finds exact keyword matches — complements FAISS semantic search.
     """
-    docs      = list(vectorstore.docstore._dict.values())
+    docs = list(vectorstore.docstore._dict.values())
     tokenized = [doc.page_content.lower().split() for doc in docs]
-    bm25      = BM25Okapi(tokenized)
+    bm25 = BM25Okapi(tokenized)
     return bm25, docs
 
 
@@ -84,17 +82,15 @@ def hybrid_retrieve(question, vectorstore, bm25, docs, k=FAISS_TOP_K):
     faiss_results = vectorstore.similarity_search(question, k=k)
 
     # BM25 keyword search
-    tokens       = question.lower().split()
-    bm25_scores  = bm25.get_scores(tokens)
+    tokens = question.lower().split()
+    bm25_scores = bm25.get_scores(tokens)
     top_bm25_idx = sorted(
-        range(len(bm25_scores)),
-        key=lambda i: bm25_scores[i],
-        reverse=True
+        range(len(bm25_scores)), key=lambda i: bm25_scores[i], reverse=True
     )[:k]
     bm25_results = [docs[i] for i in top_bm25_idx]
 
     # Merge and deduplicate
-    seen     = set()
+    seen = set()
     combined = []
     for doc in faiss_results + bm25_results:
         if doc.page_content not in seen:
@@ -110,14 +106,10 @@ def rerank(question, candidates, top_k=3):
     Scores each (question, chunk) pair together for precise relevance.
     """
     print("  Reranking candidates...")
-    pairs  = [(question, doc.page_content) for doc in candidates]
+    pairs = [(question, doc.page_content) for doc in candidates]
     scores = RERANKER.predict(pairs)
 
-    ranked = sorted(
-        zip(scores, candidates),
-        key=lambda x: x[0],
-        reverse=True
-    )
+    ranked = sorted(zip(scores, candidates), key=lambda x: x[0], reverse=True)
     return [doc for _, doc in ranked[:top_k]]
 
 
@@ -138,7 +130,7 @@ def format_chat_history(history):
     if not history:
         return "No previous conversation."
     recent = history[-MAX_HISTORY:]
-    lines  = []
+    lines = []
     for turn in recent:
         lines.append(f"User: {turn['question']}")
         lines.append(f"Assistant: {turn['answer']}")
@@ -147,13 +139,9 @@ def format_chat_history(history):
 
 def build_rag_chain(vectorstore):
     """Build the RAG chain — returns chain, bm25, docs."""
-    llm = ChatGroq(
-        model=GROQ_MODEL,
-        temperature=0.1,
-        max_tokens=512
-    )
+    llm = ChatGroq(model=GROQ_MODEL, temperature=0.1, max_tokens=512)
     bm25, docs = build_bm25_index(vectorstore)
-    chain      = CLINICAL_RAG_PROMPT | llm | StrOutputParser()
+    chain = CLINICAL_RAG_PROMPT | llm | StrOutputParser()
     return chain, bm25, docs
 
 
@@ -173,27 +161,26 @@ def ask(chain_tuple, question, history=None):
     print(f"\nQuestion: {question}")
     print("Running hybrid retrieval...")
 
-    candidates   = hybrid_retrieve(question, vectorstore, bm25, docs)
+    candidates = hybrid_retrieve(question, vectorstore, bm25, docs)
     print(f"  Retrieved {len(candidates)} candidates")
 
-    top_docs     = rerank(question, candidates)
+    top_docs = rerank(question, candidates)
     print(f"  Reranked to top {len(top_docs)}")
 
-    context      = format_docs_with_sources(top_docs)
+    context = format_docs_with_sources(top_docs)
     chat_history = format_chat_history(history)
 
-    answer = chain.invoke({
-        "context":      context,
-        "chat_history": chat_history,
-        "question":     question
-    })
+    answer = chain.invoke(
+        {"context": context, "chat_history": chat_history, "question": question}
+    )
 
     sources = [doc.metadata["source"] for doc in top_docs]
 
     return {
         "question": question,
-        "answer":   answer,
-        "sources":  sources
+        "answer": answer,
+        "sources": sources,
+        "chunks": top_docs,
     }
 
 
@@ -202,10 +189,10 @@ if __name__ == "__main__":
         print("ERROR: GROQ_API_KEY not found in .env file")
         exit(1)
 
-    vectorstore       = load_vectorstore()
-    chain_tuple       = build_rag_chain(vectorstore)
+    vectorstore = load_vectorstore()
+    chain_tuple = build_rag_chain(vectorstore)
     chain, bm25, docs = chain_tuple
-    history           = []
+    history = []
 
     questions = [
         "What are the risks of hallucination in medical AI?",
@@ -214,11 +201,7 @@ if __name__ == "__main__":
     ]
 
     for question in questions:
-        result = ask(
-            (chain, vectorstore, bm25, docs),
-            question,
-            history
-        )
+        result = ask((chain, vectorstore, bm25, docs), question, history)
         print("=" * 60)
         print(f"ANSWER:\n{result['answer']}")
         print(f"\nSOURCES:")
@@ -226,7 +209,4 @@ if __name__ == "__main__":
             print(f"  - {src}")
         print("=" * 60)
 
-        history.append({
-            "question": question,
-            "answer":   result["answer"]
-        })
+        history.append({"question": question, "answer": result["answer"]})

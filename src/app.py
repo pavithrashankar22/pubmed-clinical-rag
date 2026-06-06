@@ -8,20 +8,19 @@ sys.path.insert(0, os.path.dirname(__file__))
 from rag_chain import load_vectorstore, build_rag_chain, ask
 
 st.set_page_config(
-    page_title="Clinical Q&A Bot — PubMed RAG",
-    page_icon="🏥",
-    layout="wide"
+    page_title="Clinical Q&A Bot — PubMed RAG", page_icon="🏥", layout="wide"
 )
 
 if "question" not in st.session_state:
     st.session_state["question"] = ""
 
-@st.cache_resource
 
+@st.cache_resource
 def get_chain():
     vs = load_vectorstore()
     chain, bm25, docs = build_rag_chain(vs)
     return chain, vs, bm25, docs
+
 
 st.markdown("## 🏥 Clinical Q&A Bot")
 st.markdown("*Powered by PubMed RAG · Evidence-based answers with citations*")
@@ -68,15 +67,10 @@ if ask_btn and question.strip():
             chain, vs, bm25, docs = get_chain()
             if "history" not in st.session_state:
                 st.session_state["history"] = []
-            result = ask(
-                (chain, vs, bm25, docs),
-                question,
-                st.session_state["history"]
+            result = ask((chain, vs, bm25, docs), question, st.session_state["history"])
+            st.session_state["history"].append(
+                {"question": question, "answer": result["answer"]}
             )
-            st.session_state["history"].append({
-                "question": question,
-                "answer":   result["answer"]
-            })
 
         st.subheader("Answer")
         st.success(result["answer"])
@@ -86,7 +80,7 @@ if ask_btn and question.strip():
             st.markdown(f"- {src}")
 
         with st.expander("View raw retrieved chunks"):
-            for i, doc in enumerate(top_docs if 'top_docs' in dir() else [], 1):
+            for i, doc in enumerate(result["chunks"], 1):
                 st.markdown(f"**Chunk {i}** — {doc.metadata['source']}")
                 st.text(doc.page_content)
                 st.divider()

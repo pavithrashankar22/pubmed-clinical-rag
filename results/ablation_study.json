@@ -1,0 +1,174 @@
+{
+  "faiss_only": {
+    "avg_faithfulness": 0.8,
+    "avg_answer_relevancy": 0.8,
+    "avg_context_recall": 0.74,
+    "avg_overall": 0.78,
+    "results": [
+      {
+        "question": "How do LLMs support clinical decision making?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "What are the risks of hallucination in medical AI?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "How does RAG reduce errors in medical question answering?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.7000000000000001
+      },
+      {
+        "question": "What are challenges of deploying AI in clinical settings?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "How is NLP used to extract information from EHRs?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      }
+    ]
+  },
+  "bm25_only": {
+    "avg_faithfulness": 0.78,
+    "avg_answer_relevancy": 0.68,
+    "avg_context_recall": 0.5,
+    "avg_overall": 0.653,
+    "results": [
+      {
+        "question": "How do LLMs support clinical decision making?",
+        "faithfulness": 0.5,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.6
+      },
+      {
+        "question": "What are the risks of hallucination in medical AI?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.7666666666666666
+      },
+      {
+        "question": "How does RAG reduce errors in medical question answering?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.5,
+        "context_recall": 0.5,
+        "overall": 0.6
+      },
+      {
+        "question": "What are challenges of deploying AI in clinical settings?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.5,
+        "context_recall": 0.5,
+        "overall": 0.6
+      },
+      {
+        "question": "How is NLP used to extract information from EHRs?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.7000000000000001
+      }
+    ]
+  },
+  "hybrid": {
+    "avg_faithfulness": 0.82,
+    "avg_answer_relevancy": 0.8,
+    "avg_context_recall": 0.74,
+    "avg_overall": 0.787,
+    "results": [
+      {
+        "question": "How do LLMs support clinical decision making?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "What are the risks of hallucination in medical AI?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "How does RAG reduce errors in medical question answering?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.7000000000000001
+      },
+      {
+        "question": "What are challenges of deploying AI in clinical settings?",
+        "faithfulness": 0.9,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8333333333333334
+      },
+      {
+        "question": "How is NLP used to extract information from EHRs?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      }
+    ]
+  },
+  "hybrid_rerank": {
+    "avg_faithfulness": 0.8,
+    "avg_answer_relevancy": 0.8,
+    "avg_context_recall": 0.68,
+    "avg_overall": 0.76,
+    "results": [
+      {
+        "question": "How do LLMs support clinical decision making?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "What are the risks of hallucination in medical AI?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "How does RAG reduce errors in medical question answering?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.7000000000000001
+      },
+      {
+        "question": "What are challenges of deploying AI in clinical settings?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.8,
+        "overall": 0.8000000000000002
+      },
+      {
+        "question": "How is NLP used to extract information from EHRs?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8,
+        "context_recall": 0.5,
+        "overall": 0.7000000000000001
+      }
+    ]
+  }
+}

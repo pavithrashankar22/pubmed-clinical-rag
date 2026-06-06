@@ -1,0 +1,5 @@
+method,avg_faithfulness,avg_answer_relevancy,avg_context_recall,avg_overall
+faiss_only,0.8,0.8,0.74,0.78
+bm25_only,0.78,0.68,0.5,0.653
+hybrid,0.82,0.8,0.74,0.787
+hybrid_rerank,0.8,0.8,0.68,0.76
