@@ -5,10 +5,11 @@ from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 
-DATA_PATH        = "data/abstracts.json"
+DATA_PATH = "data/abstracts.json"
 FAISS_INDEX_PATH = "faiss_index"
-CHUNK_SIZE       = 300
-CHUNK_OVERLAP    = 75
+CHUNK_SIZE = 300
+CHUNK_OVERLAP = 75
+
 
 def load_articles(path):
     with open(path, "r", encoding="utf-8") as f:
@@ -24,31 +25,33 @@ def articles_to_documents(articles):
         doc = Document(
             page_content=content,
             metadata={
-                "pmid":   article["pmid"],
-                "title":  article["title"],
-                "year":   article["year"],
+                "pmid": article["pmid"],
+                "title": article["title"],
+                "year": article["year"],
                 "source": article["source"],
-            }
+            },
         )
         docs.append(doc)
     return docs
+
 
 def chunk_documents(docs):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
         chunk_overlap=CHUNK_OVERLAP,
-        separators=["\n\n", "\n", ". ", " ", ""]
+        separators=["\n\n", "\n", ". ", " ", ""],
     )
     chunks = splitter.split_documents(docs)
     print(f"Split {len(docs)} documents into {len(chunks)} chunks")
     return chunks
+
 
 def build_and_save_index(chunks):
     print("\nLoading embedding model (downloads ~80MB first time)...")
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True}
+        encode_kwargs={"normalize_embeddings": True},
     )
 
     print("Building FAISS index — embedding all chunks...")
@@ -58,6 +61,7 @@ def build_and_save_index(chunks):
     vectorstore.save_local(FAISS_INDEX_PATH)
     print(f"Index saved to {FAISS_INDEX_PATH}/")
     return vectorstore
+
 
 def test_retrieval(vectorstore):
     print("\n── Retrieval Test ──────────────────────")
@@ -71,9 +75,9 @@ def test_retrieval(vectorstore):
 
 
 if __name__ == "__main__":
-    articles  = load_articles(DATA_PATH)
-    docs      = articles_to_documents(articles)
-    chunks    = chunk_documents(docs)
-    vs        = build_and_save_index(chunks)
+    articles = load_articles(DATA_PATH)
+    docs = articles_to_documents(articles)
+    chunks = chunk_documents(docs)
+    vs = build_and_save_index(chunks)
     test_retrieval(vs)
     print("\nIndex build complete! Ready for RAG.")

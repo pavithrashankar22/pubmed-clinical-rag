@@ -27,10 +27,7 @@ def fetch_abstracts(pmids):
     for i in range(0, len(pmids), batch_size):
         batch = pmids[i : i + batch_size]
         handle = Entrez.efetch(
-            db="pubmed",
-            id=",".join(batch),
-            rettype="xml",
-            retmode="xml"
+            db="pubmed", id=",".join(batch), rettype="xml", retmode="xml"
         )
         records = Entrez.read(handle)
         handle.close()
@@ -51,24 +48,28 @@ def fetch_abstracts(pmids):
                 if not abstract or len(abstract) < 50:
                     continue
 
-                pub_date = article.get("Journal", {}).get(
-                    "JournalIssue", {}
-                ).get("PubDate", {})
+                pub_date = (
+                    article.get("Journal", {})
+                    .get("JournalIssue", {})
+                    .get("PubDate", {})
+                )
                 year = pub_date.get("Year", "Unknown")
 
                 pmid = str(record["MedlineCitation"]["PMID"])
 
                 # Clean text — remove non-ascii characters
-                title    = title.encode("ascii", "ignore").decode()
+                title = title.encode("ascii", "ignore").decode()
                 abstract = abstract.encode("ascii", "ignore").decode()
 
-                articles.append({
-                    "pmid":     pmid,
-                    "title":    title,
-                    "abstract": abstract,
-                    "year":     year,
-                    "source":   f"PubMed PMID {pmid} ({year}): {title}"
-                })
+                articles.append(
+                    {
+                        "pmid": pmid,
+                        "title": title,
+                        "abstract": abstract,
+                        "year": year,
+                        "source": f"PubMed PMID {pmid} ({year}): {title}",
+                    }
+                )
 
             except Exception as e:
                 print(f"  Skipping malformed record: {e}")
@@ -81,7 +82,10 @@ def fetch_abstracts(pmids):
 
 
 def save_articles(articles, output_path):
-    os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else ".", exist_ok=True)
+    os.makedirs(
+        os.path.dirname(output_path) if os.path.dirname(output_path) else ".",
+        exist_ok=True,
+    )
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(articles, f, indent=2, ensure_ascii=False)
     print(f"\nSaved {len(articles)} articles to {output_path}")
@@ -96,13 +100,13 @@ if __name__ == "__main__":
         print(f"Loaded {len(existing)} existing articles")
 
     # Fetch new ones
-    pmids    = fetch_pubmed_ids(SEARCH_QUERY, MAX_ARTICLES)
+    pmids = fetch_pubmed_ids(SEARCH_QUERY, MAX_ARTICLES)
     articles = fetch_abstracts(pmids)
 
     # Combine — deduplicate by PMID
     all_pmids = {a["pmid"] for a in existing}
-    new_only  = [a for a in articles if a["pmid"] not in all_pmids]
-    combined  = existing + new_only
+    new_only = [a for a in articles if a["pmid"] not in all_pmids]
+    combined = existing + new_only
 
     save_articles(combined, "data/abstracts.json")
     print(f"Total articles now: {len(combined)}")

@@ -31,23 +31,23 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 eval_questions = [
     {
         "question": "How do large language models support clinical decision making?",
-        "ground_truth": "LLMs support clinical decision making by providing diagnostic assistance, treatment recommendations, and summarizing patient records."
+        "ground_truth": "LLMs support clinical decision making by providing diagnostic assistance, treatment recommendations, and summarizing patient records.",
     },
     {
         "question": "What are the risks of hallucination in medical AI?",
-        "ground_truth": "Hallucination in medical AI refers to generation of fabricated information which poses risks including misdiagnosis and incorrect treatment recommendations."
+        "ground_truth": "Hallucination in medical AI refers to generation of fabricated information which poses risks including misdiagnosis and incorrect treatment recommendations.",
     },
     {
         "question": "How does RAG reduce errors in medical question answering?",
-        "ground_truth": "RAG reduces errors by retrieving relevant documents and grounding LLM responses in actual evidence rather than relying on parametric knowledge."
+        "ground_truth": "RAG reduces errors by retrieving relevant documents and grounding LLM responses in actual evidence rather than relying on parametric knowledge.",
     },
     {
         "question": "What are challenges of deploying AI in clinical settings?",
-        "ground_truth": "Challenges include data privacy, bias in training data, lack of interpretability, regulatory compliance, and integration with existing workflows."
+        "ground_truth": "Challenges include data privacy, bias in training data, lack of interpretability, regulatory compliance, and integration with existing workflows.",
     },
     {
         "question": "How is NLP used to extract information from electronic health records?",
-        "ground_truth": "NLP extracts clinical entities such as diagnoses, medications and procedures from unstructured EHR text using named entity recognition models."
+        "ground_truth": "NLP extracts clinical entities such as diagnoses, medications and procedures from unstructured EHR text using named entity recognition models.",
     },
 ]
 
@@ -58,7 +58,7 @@ def llm_judge(prompt):
         model="llama-3.1-8b-instant",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.0,
-        max_tokens=10
+        max_tokens=10,
     )
     text = response.choices[0].message.content.strip()
     try:
@@ -134,7 +134,7 @@ Respond with ONLY a decimal number between 0.0 and 1.0. Nothing else."""
 
 def run_evaluation():
     print("Loading RAG system...")
-    vectorstore      = load_vectorstore()
+    vectorstore = load_vectorstore()
     chain, bm25, docs = build_rag_chain(vectorstore)
 
     print(f"\nEvaluating {len(eval_questions)} questions...\n")
@@ -142,51 +142,56 @@ def run_evaluation():
     results = []
 
     for i, item in enumerate(eval_questions, 1):
-        q  = item["question"]
+        q = item["question"]
         gt = item["ground_truth"]
         print(f"[{i}/{len(eval_questions)}] {q[:60]}...")
 
         # Get RAG answer + retrieved chunks
         result = ask((chain, vectorstore, bm25, docs), q, [])
-        answer       = result["answer"]
+        answer = result["answer"]
         from rag_chain import hybrid_retrieve, rerank
+
         candidates = hybrid_retrieve(q, vectorstore, bm25, docs)
-        raw_docs   = rerank(q, candidates)
-        contexts     = [doc.page_content for doc in raw_docs]
+        raw_docs = rerank(q, candidates)
+        contexts = [doc.page_content for doc in raw_docs]
 
         # Score each metric
-        faith   = score_faithfulness(q, answer, contexts)
-        relev   = score_answer_relevancy(q, answer)
-        recall  = score_context_recall(q, contexts, gt)
+        faith = score_faithfulness(q, answer, contexts)
+        relev = score_answer_relevancy(q, answer)
+        recall = score_context_recall(q, contexts, gt)
         overall = (faith + relev + recall) / 3
 
-        results.append({
-            "question":         q,
-            "faithfulness":     faith,
-            "answer_relevancy": relev,
-            "context_recall":   recall,
-            "overall":          overall,
-        })
+        results.append(
+            {
+                "question": q,
+                "faithfulness": faith,
+                "answer_relevancy": relev,
+                "context_recall": recall,
+                "overall": overall,
+            }
+        )
 
-        print(f"   Faithfulness: {faith:.2f} | Relevancy: {relev:.2f} | Recall: {recall:.2f} | Overall: {overall:.2f}")
-        #print(f"   Faithfulness: {faith:.2f} | Relevancy: {relev:.2f} | Recall: {recall:.2f} | Overall: {overall:.2f}")
+        print(
+            f"   Faithfulness: {faith:.2f} | Relevancy: {relev:.2f} | Recall: {recall:.2f} | Overall: {overall:.2f}"
+        )
+        # print(f"   Faithfulness: {faith:.2f} | Relevancy: {relev:.2f} | Recall: {recall:.2f} | Overall: {overall:.2f}")
         time.sleep(15)  # wait 15 seconds between questions to avoid rate limit
 
     # ── Summary table ──────────────────────────────────────────
-    avg_faith  = sum(r["faithfulness"]     for r in results) / len(results)
-    avg_relev  = sum(r["answer_relevancy"] for r in results) / len(results)
-    avg_recall = sum(r["context_recall"]   for r in results) / len(results)
-    avg_all    = (avg_faith + avg_relev + avg_recall) / 3
+    avg_faith = sum(r["faithfulness"] for r in results) / len(results)
+    avg_relev = sum(r["answer_relevancy"] for r in results) / len(results)
+    avg_recall = sum(r["context_recall"] for r in results) / len(results)
+    avg_all = (avg_faith + avg_relev + avg_recall) / 3
 
-    print("\n" + "="*55)
+    print("\n" + "=" * 55)
     print("  EVALUATION RESULTS — PubMed Clinical RAG")
-    print("="*55)
+    print("=" * 55)
     print(f"  Faithfulness     : {avg_faith:.3f}  (answer grounded in docs?)")
     print(f"  Answer Relevancy : {avg_relev:.3f}  (answer addresses question?)")
     print(f"  Context Recall   : {avg_recall:.3f}  (retriever found right chunks?)")
-    print("-"*55)
+    print("-" * 55)
     print(f"  Overall Score    : {avg_all:.3f}")
-    print("="*55)
+    print("=" * 55)
     print("\nNote: Scores evaluated using LLM-as-a-judge (Groq LLaMA-3.1)")
 
     return results
